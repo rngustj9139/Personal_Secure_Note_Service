@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <head th:insert="fragments.html :: header"></head>
+</head>
+<body>
+
+<header th:insert="fragments.html :: nav"></header>
+
+<!-- 개인 user만 접근할 수 있는 페이지 -->
+<div class="container">
+  <h1>개인노트</h1>
+
+  <!-- 노트 작성 Modal Button -->
+  <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#newNoteModal"
+          data-bs-whatever="@mdo">
+    새 글 쓰기
+  </button> <!-- 클릭하면 자바스크립트로 모달을 뜨게한다. -->
+
+  <!-- 노트 작성 Modal -->
+  <div
+          class="modal fade"
+          id="newNoteModal"
+          tabindex="-1"
+          aria-labelledby="newNoteModalLabel"
+          aria-hidden="true"
+  > <!-- tabindex의 포커스의 순서를 부여하는 방식은 tabindex 값에 양의 정수를 넣어 주면 됩니다. 예를 들어 어떤 HTML 요소에 tabindex=”1”을 주었다면 해당 웹 페이지 상에서 Tab 키를 눌렀을 때 tabindex=”1”이 부여된 요소가 가장 먼저 포커스 됩니다. tabindex 속성은 양의 정숫값 외에 0과 -1의 값을 가질 수도 있습니다. 먼저 tabindex=”0”은 Tab키를 눌렀을 때 포커스를 받을 수 없는 요소, 이를테면 <span> 등의 요소에 포커스를 받게 할 수 있습니다. 반면 -1은 기본적으로 Tab키를 눌렀을 때 포커스를 받을 수 있는 폼 요소나 링크 요소를 강제로 포커스를 받지 못하도록 하는 값입니다 -->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newNoteModalLabel">새 글 쓰기</h5>
+          <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close">
+          </button>
+        </div>
+        <form th:action="@{/note}" method="post">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="title" class="col-form-label">제목</label>
+              <input type="text" class="form-control" id="title" name="title">
+            </div>
+            <div class="mb-3">
+              <label for="content" class="col-form-label">내용</label>
+              <textarea class="form-control" rows="20" id="content" name="content"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">종료</button> <!-- data-bs-dismiss="modal"이어야지 이 버튼을 클릭 했을때 모달이 닫힌다. -->
+            <button type="submit" class="btn btn-primary">저장</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 노트 내용 조회 -->
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <!-- 노트 개수만큼 반복 -->
+      <div class="border border-dark" th:each="note : ${notes}">
+        <h2 th:text="${note.title}"></h2>
+        <div>
+          <p th:text="${note.content}" style="white-space: pre-wrap;"></p> <!-- pre-wrap 공백을 코드에 있는 그대로 표시함 코드에 줄바꿈이 없어도 자동 줄바꿈이 됨. -->
+          <form th:action="@{/note}" th:method="delete">
+            <input type="hidden" name="id" th:value="${note.id}">
+            <!-- 노트 삭제 버튼 -->
+            <button type="submit" class="btn btn-secondary">삭제</button>
+            <!-- 작성일자 표시 -->
+            <span style="margin: 10px 0px;">Posted On
+              <strong th:text="${#temporals.format(note.createdAt, 'yyyy-MM-dd')}"></strong>
+            </span>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

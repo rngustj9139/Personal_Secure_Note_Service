@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link rel="stylesheet" type="text/css" href="css/signin.css">
+  <head th:insert="fragments.html :: header"></head>
+</head>
+<body>
+
+<header th:insert="fragments.html :: nav"></header>
+
+<div class="container">
+  <form class="form-signin" method="post" th:action="@{/login}">
+    <h2 class="form-signin-heading">로그인</h2>
+    <p>
+      <label for="username" class="sr-only">Username</label>
+      <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus> <!-- autofocus :문서가 로드되면 autofocus가 설정된 <input>에 자동 focus를 준다. required : required 가 설정된 <input>에 입력값이 없을때 <form>을 submit하게 되면 해당 <input>으로 focus를 넘긴다. -->
+    </p>
+    <p>
+      <label for="password" class="sr-only">Password</label>
+      <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+    </p>
+    <div>
+      <span>로그인 유지하기</span>
+      <input type="checkbox" id="remember-me" name="remember-me" class="form-check-input mt-0" autocomplete="off"> <!-- autocomplete="off" 여야 자동으로 체크가 안된다. -->
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">로그인</button>
+  </form>
+</div>
+
+</body>
+</html>
