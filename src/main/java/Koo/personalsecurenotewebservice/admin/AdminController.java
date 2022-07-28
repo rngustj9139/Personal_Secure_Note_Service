@@ -20,7 +20,7 @@ public class AdminController {
     private final NoteService noteService;
 
     /**
-     * 어드민인 경우 노트 조회
+     * 어드민인 경우 모든 유저의 모든 노트 조회
      *
      * @return admin/index.html
      */
