@@ -6,10 +6,10 @@ import lombok.Setter;
 /**
  * 노트 등록 Dto
  */
-@Getter
-@Setter
+@Getter @Setter
 public class NoteRegisterDto {
 
     private String title;
     private String content;
+
 }

@@ -23,7 +23,7 @@ public class NoteController {
      */
     @GetMapping
     public String getNote(Authentication authentication, Model model) {
-        User user = (User) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal(); // 로그인한 사용자 정보를 가져온다.
         List<Note> notes = noteService.findByUser(user);
         // note/index.html 에서 notes 사용가능
         model.addAttribute("notes", notes);
@@ -38,7 +38,7 @@ public class NoteController {
     public String saveNote(Authentication authentication, @ModelAttribute NoteRegisterDto noteDto) {
         User user = (User) authentication.getPrincipal();
         noteService.saveNote(user, noteDto.getTitle(), noteDto.getContent());
-        return "redirect:note";
+        return "redirect:/note";
     }
 
     /**
@@ -48,7 +48,7 @@ public class NoteController {
     public String deleteNote(Authentication authentication, @RequestParam Long id) {
         User user = (User) authentication.getPrincipal();
         noteService.deleteNote(user, id);
-        return "redirect:note";
+        return "redirect:/note";
     }
 }
 
