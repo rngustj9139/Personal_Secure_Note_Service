@@ -9,8 +9,24 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/SecureNote  # ;MVCC=TRUE로 설정해야 여러 컴퓨터가 DB에 접근했을때 빠르게 처리가 된다. (but 최근 버전에는 사용 불가)
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver # DB 커넥션과 관련된 설정
+  jpa:
+    open-in-view: true # OSIV (Open Session In View)를 false로 하면 영속성 컨텍스트와 데이터베이스 커넥션이 트랜잭션이 시작하고 끝날때 까지만 유지 된다. (default는 true이다.)
+    hibernate:
+      ddl-auto: create # 자동으로 테이블을 만듦 => create(어플리케이션 실행시점에 가지고 있는 테이블 다 지우고 새로 생성), 변경사항이 발생했을때만 업데이트 => update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  #        default_batch_fetch_size: 100 # OrderApiController의 orderV3.1을 위해 사용됨 => 강제 초기화로 인한 컬렉션 조회에서 order들을 가져올때 orderItems 각각의 orderItems를(100개) 쿼리 한방으로 가져온다. 데이터가 100개있고 default_batch_fetch_size가 10이면 쿼리가 10번 나간다. item도 쿼리 한방에 다 가져올 수 있다. [이건 글로벌한 설정임 구체적인 설정을 원하면 Order.class의 OrderItems의 위에 @BatchSize(size = 50) 이렇게 쓰기]
+
+
 # session
 server:
   servlet:
     session:
-      timeout: 10m # 기본이 30분이고 최소는 1분입니다.
+      timeout: 10m # 기본이 30분이고 최소는 1분입니다. (세션 시간 설정)
