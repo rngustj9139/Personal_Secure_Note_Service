@@ -1,0 +1,16 @@
+# logging 레벨 설정
+logging:
+  level:
+    root: INFO
+    sql: ERROR
+# Overloaded POST 사용
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+# session
+server:
+  servlet:
+    session:
+      timeout: 10m # 기본이 30분이고 최소는 1분입니다.
