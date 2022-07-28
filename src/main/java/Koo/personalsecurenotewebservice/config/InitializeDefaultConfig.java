@@ -42,4 +42,5 @@ public class InitializeDefaultConfig {
         noticeService.saveNotice("환영합니다.", "환영합니다 여러분");
         noticeService.saveNotice("노트 작성 방법 공지", "1. 회원가입\n2. 로그인\n3. 노트 작성\n4. 저장\n* 본인 외에는 게시글을 볼 수 없습니다.");
     }
+
 }

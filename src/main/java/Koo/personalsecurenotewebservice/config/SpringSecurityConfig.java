@@ -35,29 +35,28 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe(); // 사용자 세션이 만료되고 웹 브라우저가 종료된 후에도 애플리케이션이 사용자의 정보를 기억한다.
         // authorization
         http.authorizeRequests()
-                // /와 /home은 모두에게 허용
+                // /와 /home /signup은 모두에게 허용
                 .antMatchers("/", "/home", "/signup").permitAll()
                 // hello 페이지는 USER 롤을 가진 유저에게만 허용
-                .antMatchers("/note").hasRole("USER")
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/note").hasRole("USER") // 개인 노트 페이지는 유저만 접근 가능
+                .antMatchers("/admin").hasRole("ADMIN") // 어드민 페이지는 어드민만 접근 가능
                 .antMatchers(HttpMethod.POST, "/notice").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/notice").hasRole("ADMIN")
                 .anyRequest().authenticated();
         // login
         http.formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/") // 로그인에 성공할 경우 홈으로 돌아간다.
                 .permitAll(); // 모두 허용
         // logout
         http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/");
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // 로그인을 한 상태면 로그아웃을 할 수 있도록 자동으로 설정해준다.
+                .logoutSuccessUrl("/"); // 로그아웃에 성공하면 홈으로 돌아간다.
     }
 
     @Override
-    public void configure(WebSecurity web) {
-        // 정적 리소스 spring security 대상에서 제외
-//        web.ignoring().antMatchers("/images/**", "/css/**"); // 아래 코드와 같은 코드입니다.
+    public void configure(WebSecurity web) { // 정적 리소스는 spring security 대상에서 제외
+//      web.ignoring().antMatchers("/images/**", "/css/**"); // 아래 코드와 같은 코드입니다.
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -68,12 +67,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     @Override
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() { // 유저를 가져오는 방법을 정의함 => (스프링 시큐리티는 우리가 만든 User 클래스를 모르기 때문이다.)
         return username -> {
             User user = userService.findByUsername(username);
             if (user == null) {
                 throw new UsernameNotFoundException(username);
             }
+
             return user;
         };
     }
