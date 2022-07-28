@@ -27,6 +27,7 @@ public class NoticeController {
     public String getNotice(Model model) {
         List<Notice> notices = noticeService.findAll();
         model.addAttribute("notices", notices);
+
         return "notice/index";
     }
 
@@ -39,7 +40,8 @@ public class NoticeController {
     @PostMapping
     public String postNotice(@ModelAttribute NoteRegisterDto noteDto) {
         noticeService.saveNotice(noteDto.getTitle(), noteDto.getContent());
-        return "redirect:notice";
+
+        return "redirect:/notice";
     }
 
     /**
@@ -51,7 +53,8 @@ public class NoticeController {
     @DeleteMapping
     public String deleteNotice(@RequestParam Long id) {
         noticeService.deleteNotice(id);
-        return "redirect:notice";
+
+        return "redirect:/notice";
     }
 
 }
