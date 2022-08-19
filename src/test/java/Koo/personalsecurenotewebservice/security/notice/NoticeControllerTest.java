@@ -30,7 +30,7 @@ class NoticeControllerTest {
     @BeforeEach
     public void setUp(@Autowired WebApplicationContext applicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
-                .apply(springSecurity())
+                .apply(springSecurity()) // MockMvc에 스프링시큐리티 적용
                 .alwaysDo(print())
                 .build();
     }
@@ -43,7 +43,7 @@ class NoticeControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser // 가짜 유저를 스프링 시큐리티에 등록 후 테스트 수행
     void getNotice_인증있음() throws Exception {
         mockMvc.perform(get("/notice"))
                 .andExpect(status().isOk())

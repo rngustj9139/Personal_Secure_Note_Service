@@ -1,5 +1,6 @@
 package Koo.personalsecurenotewebservice.config;
 
+import Koo.personalsecurenotewebservice.customfilter.StopwatchFilter;
 import Koo.personalsecurenotewebservice.user.User;
 import Koo.personalsecurenotewebservice.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -27,7 +29,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception { // 시큐리티의 상세 설정 정의
-        // basic authentication
+        // Custom Filter 등록
+        http.addFilterBefore(
+                new StopwatchFilter(),
+                WebAsyncManagerIntegrationFilter.class
+        );
+        // basic authentication filter
         http.httpBasic().disable(); // basic authentication filter 비활성화 (httpBasic() : Http basic Auth 기반으로 로그인 인증창이 뜸. 기본 인증 로그인을 이용하지 않으면 disable )
         // csrf
         http.csrf(); // 사이트 간 요청 위조(Cross-site Request Forgery) 방지 ex) 이러한 공격을 하기 위하여 해커는 우선 공격을 할 사이트를 먼저 분석합니다. 예를 들어, 나무위키의 경우에 토론은 namu.wiki/topic/ 이라고 시작하며 뒤에 숫자가 붙는 형식인데 이 뒤의 숫자에 패턴이 있습니다.(실제론 토론이 개설된 순서대로 붙는 일련번호이다.) 그러면 이 패턴을 이용하여 일반적인 방법으로 접근할 수 없는 페이지를 오픈 한다든지, 개발에 사용되고 실제로 사용하지 않는 샘플 페이지를 찾아낸다든지 이러한 방법이 가능합니다.
@@ -68,7 +75,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() { // 유저를 가져오는 방법을 정의함 => (스프링 시큐리티는 우리가 만든 User 클래스를 모르기 때문이다.)
-        return username -> {
+        return username -> { // lambda
             User user = userService.findByUsername(username);
             if (user == null) {
                 throw new UsernameNotFoundException(username);

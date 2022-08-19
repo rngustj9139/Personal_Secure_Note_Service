@@ -41,9 +41,9 @@ class NoteControllerTest {
     @BeforeEach
     public void setUp(@Autowired WebApplicationContext applicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
-                .apply(springSecurity())
+                .apply(springSecurity()) // MockMvc에 스프링 시큐리티 적용
                 .alwaysDo(print())
-                .build();
+                .build(); // MockMvc 생성
         user = userRepository.save(new User("user123", "user", "ROLE_USER"));
         admin = userRepository.save(new User("admin123", "admin", "ROLE_ADMIN"));
     }
