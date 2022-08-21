@@ -45,13 +45,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // basic authentication filter
         http.httpBasic().disable(); // basic authentication filter 비활성화 (httpBasic() : Http basic Auth 기반으로 로그인 인증창이 뜸. 기본 인증 로그인을 이용하지 않으면 disable )
 
-        // csrf
-        http.csrf(); // 사이트 간 요청 위조(Cross-site Request Forgery) 방지 ex) 이러한 공격을 하기 위하여 해커는 우선 공격을 할 사이트를 먼저 분석합니다. 예를 들어, 나무위키의 경우에 토론은 namu.wiki/topic/ 이라고 시작하며 뒤에 숫자가 붙는 형식인데 이 뒤의 숫자에 패턴이 있습니다.(실제론 토론이 개설된 순서대로 붙는 일련번호이다.) 그러면 이 패턴을 이용하여 일반적인 방법으로 접근할 수 없는 페이지를 오픈 한다든지, 개발에 사용되고 실제로 사용하지 않는 샘플 페이지를 찾아낸다든지 이러한 방법이 가능합니다.
+        // csrf (이 기능은 인증과는 별도로 악의적인 공격자의 침입을 막기 위한 목적으로 클라이언트가  POST, PUT, DELETE 등의 HTTP METHOD 방식으로 요청할 때 반드시 csrf 토큰을 요구하게 되고 토큰이 없을 경우 서버 접근을 막고 있습니다. 이 기능을 쓰지 않는다면 .disable() 처리를 하면 된다.)
+        http.csrf().disable(); // 사이트 간 요청 위조(Cross-site Request Forgery) 방지 ex) 이러한 공격을 하기 위하여 해커는 우선 공격을 할 사이트를 먼저 분석합니다. 예를 들어, 나무위키의 경우에 토론은 namu.wiki/topic/ 이라고 시작하며 뒤에 숫자가 붙는 형식인데 이 뒤의 숫자에 패턴이 있습니다.(실제론 토론이 개설된 순서대로 붙는 일련번호이다.) 그러면 이 패턴을 이용하여 일반적인 방법으로 접근할 수 없는 페이지를 오픈 한다든지, 개발에 사용되고 실제로 사용하지 않는 샘플 페이지를 찾아낸다든지 이러한 방법이 가능합니다.
 
         // remember-me
         http.rememberMe(); // 사용자 세션이 만료되고 웹 브라우저가 종료된 후에도 애플리케이션이 사용자의 정보를 기억한다. (로그인 유지하기)
 
         // session 대신 토큰 이용
+        // https://www.inflearn.com/questions/34886 참고
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 우리는 JWT를 사용하므로(토큰방식) 세션이 필요없다 따라서 Stateless로 설정해둔다.
 
