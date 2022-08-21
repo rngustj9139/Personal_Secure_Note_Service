@@ -41,7 +41,7 @@ public class JwtKey { // jwt secret key를 제공하고 key rolling을 지원
     public static Pair<String, Key> getRandomKey() {
         String kid = KID_SET[randomIndex.nextInt(KID_SET.length)];
         String secretKey = SECRET_KEY_SET.get(kid);
-        return Pair.of(kid, Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)));
+        return Pair.of(kid, Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8))); // hmacShaKeyFor -> key의 길이에 따라서 적절한 암호화 방식을 선택해준다.
     }
 
     /**
